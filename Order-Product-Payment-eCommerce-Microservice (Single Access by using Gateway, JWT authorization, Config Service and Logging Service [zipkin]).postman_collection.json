@@ -1,0 +1,413 @@
+{
+	"info": {
+		"_postman_id": "16ba71d6-b056-4650-bd0b-dbbf63043205",
+		"name": "Order-Product-Payment-eCommerce-Microservice (Single Access by using Gateway, JWT authorization, Config Service and Logging Service [zipkin])",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33936986"
+	},
+	"item": [
+		{
+			"name": "Auth Service | Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"User1\",\r\n    \"password\" : \"user1\",\r\n    \"email\" : \"user@refreshtoken.com\",\r\n    \"roles\" : [\r\n            \"ROLE_ADMIN\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7777/authenticate/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth Service | Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTgxNDAyMSwiZXhwIjoxNzE1ODE0MTQxfQ.xKWASbZ2egCf1OvNr1DWgdTNzqRypVdeKkI2EYxjt9lU4kMLJdSxqH88DiNfk7hw1ElsXRlCxDpxLfdpuJO68Q"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"alokebd\",\r\n    \"password\" : \"user1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7777/authenticate/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth Service | Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\" : \"f70eec55-d050-4baf-886c-f31d232b8484\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7777/authenticate/refreshtoken"
+			},
+			"response": []
+		},
+		{
+			"name": "Product Service | Add Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTc5NDEwNiwiZXhwIjoxNzE1Nzk0MjI2fQ.LS42NIqaJbfHJZ4nN3Rgk0Bczx37Op3MrC5fUavkF7MhF9s6fGk8YY6f5R-sKm5hMifv-bx_GEcocX5EVkXdlw"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Product 2\",\r\n    \"price\" : 200,\r\n    \"quantity\" : 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8081/product"
+			},
+			"response": []
+		},
+		{
+			"name": "Product Service | Get Product By Id (Found)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTg4MzAxNSwiZXhwIjoxNzE1ODgzMTM1fQ.0eTJVukoAplN9_VEgAnaYB2mgXuT5clRU8BfZvqXE9PL__tvSvbhTXgDp1FY5eI9AN68SLonlVHyX_WR6dE5Hg"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/product/10"
+			},
+			"response": []
+		},
+		{
+			"name": "Product Service | Remove by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTg4MzAxNSwiZXhwIjoxNzE1ODgzMTM1fQ.0eTJVukoAplN9_VEgAnaYB2mgXuT5clRU8BfZvqXE9PL__tvSvbhTXgDp1FY5eI9AN68SLonlVHyX_WR6dE5Hg"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8081/product/12"
+			},
+			"response": []
+		},
+		{
+			"name": "Product Service | Get Product By Id (Not Found)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/product/100"
+			},
+			"response": []
+		},
+		{
+			"name": "Product Service | Reduce Quantity of Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/product/reduceQuantity/1?quantity=20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"product",
+						"reduceQuantity",
+						"1"
+					],
+					"query": [
+						{
+							"key": "quantity",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order Service | Place an Order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTg4MjYyNywiZXhwIjoxNzE1ODgyNzQ3fQ.jAhyWUtZ23ZLjnKnQ0G2GGTsrAWDJay5t4S-edr0OErrDgJtWXWogk7SmhJ8wy9IW91RJWHNwLC5ILdOA29fmA"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\" : 10,\r\n    \"totalAmount\" : 20,\r\n    \"quantity\" : 1,\r\n    \"paymentMode\" : \"CASH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8082/order/placeorder"
+			},
+			"response": []
+		},
+		{
+			"name": "Order Service | Get Order Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTg4MzA3NywiZXhwIjoxNzE1ODgzMTk3fQ.broPZqAGnlnP-I44CAzE-j2z37Itr-BbTZB-WNGkTpcyTPDrLsybIjHuKYDZA4j7MqoGse-s_63LHfYGuZahjw"
+					}
+				],
+				"url": "http://localhost:8082/order/12"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Auth Service | Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"David\",\r\n    \"password\" : \"user1\",\r\n    \"email\" : \"david@refreshtoken.com\",\r\n    \"roles\" : [\r\n            \"ROLE_USER\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/authenticate/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Auth Service | Create Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"User3\",\r\n    \"password\" : \"user1\",\r\n    \"email\" : \"user3@refreshtoken.com\",\r\n    \"roles\" : [\r\n            \"ROLE_ADMIN\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/authenticate/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Auth Service | Login User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"David\",\r\n    \"password\" : \"user1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/authenticate/login"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Auth Service | Login Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"User3\",\r\n    \"password\" : \"user1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/authenticate/login"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Auth Service | Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\" : \"ac9203fc-915b-4a03-ab5c-e90b20794efc\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/authenticate/refreshtoken"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Product Service | Get Product By Id (Not Found)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZCIsImlzcyI6IlJPTEVfVVNFUiAiLCJpYXQiOjE3MTU4ODM4MTIsImV4cCI6MTcxNTg4MzkzMn0.AgrAikfbR3WiXOCI6Ra5DVp1lOMdZKCJNhNMp_XSCMJby2Vud0_01xsU9_XWEzWXZcpgki0WlLI1CLnlSV9gpA"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:9090/product/3"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Product Service | Get Product By Id (Found)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZCIsImlzcyI6IlJPTEVfVVNFUiAiLCJpYXQiOjE3MTU4ODM5ODUsImV4cCI6MTcxNTg4NDEwNX0.bmgZI1KcHq8LxwJKlpR11W0UQBL5PSrqtC-meRRjjgheX57xuieEAlC_sSeDy9vflBWOHpK3RqdS_oHC-yK3Dg"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:9090/product/10"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Product Service | Add Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTc5MjAxNywiZXhwIjoxNzE1NzkyMTM3fQ.gGDcAeNhD6pfwC2kcStZgZ9uvRi28w6wL4IoHBlskWdX6x6WamLPAnDHijeQifJYWMjFpHvnUI98EcqYpbMmuw"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Product 1\",\r\n    \"price\" : 100,\r\n    \"quantity\" : 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/product"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Order Service | Place an Order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbG9rZWJkIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTcxNTc5NjU0MiwiZXhwIjoxNzE1Nzk2NjYyfQ.y4w2wuRLDD8gqWNZVZzk0HtYVvoD1CgmL8qFi7g9cuTEV2gUTc-NCV8SVHGB1pnUaCHcimVm0IYFD7RULIIDiA"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\" : 10,\r\n    \"totalAmount\" : 50,\r\n    \"quantity\" : 1,\r\n    \"paymentMode\" : \"CASH\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9090/order/placeorder"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Order Service | Get Order Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZCIsImlzcyI6IlJPTEVfVVNFUiAiLCJpYXQiOjE3MTU4ODU5MTIsImV4cCI6MTcxNTg4NjAzMn0.kzZ-GuNyEBZLFeCHl41fDRhY93LZUom9B-HQ1jFY8J883RRlDmBreumeiG6_pXBWglemQ7iR7V8zUVuPoCia0w"
+					}
+				],
+				"url": "http://localhost:9090/order/12"
+			},
+			"response": []
+		},
+		{
+			"name": "API Gateway | Product Service | Reduce Quantity of Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEYXZpZCIsImlzcyI6IlJPTEVfVVNFUiAiLCJpYXQiOjE3MTU4ODgyNjQsImV4cCI6MTcxNTg4ODM4NH0.EmNw4HnxbVPCjDe1VIWhLwUm8ORATxyXa-IJJ7IzuRu8lEj8D_R7VRjAIgJ4sOJXL9X1ApthHQIsOa_hWrmryw"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/product/reduceQuantity/9?quantity=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"product",
+						"reduceQuantity",
+						"9"
+					],
+					"query": [
+						{
+							"key": "quantity",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
