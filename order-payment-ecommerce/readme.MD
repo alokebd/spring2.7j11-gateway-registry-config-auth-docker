@@ -1,6 +1,27 @@
 #Springboot Microservices with Eureka Service Registry, Config Server, Cloud API Gateway 
+**************
+a) run maven command (mvn clean compile package) a
+b) Running on Docker, use following commands:
+docker build --pull --rm -f "Dockerfile" -t service-registry:latest "."
 
-# NOTE: As we have config service, after running Service Registry, run Config Service before running others.
+docker build --pull --rm -f "Dockerfile" -t configserver:latest "."
+
+docker build --pull --rm -f "Dockerfile" -t apigateway:latest "."
+
+docker build --pull --rm -f "Dockerfile" -t auth-service:latest "."
+
+docker build --pull --rm -f "Dockerfile" -t orderservice:latest "."
+
+docker build --pull --rm -f "Dockerfile" -t productservice:latest "."
+
+docker build --pull --rm -f "Dockerfile" -t paymentservice:latest "."
+
+
+docker-compose up
+
+
+#************************************************************************************************
+# NOTE: As we have config service, after running Service Registry, run Config Service before running others (for local testing).
 
 # Check Service Regisry (http://localhost:8761)
 
@@ -27,6 +48,12 @@ Authrizatio: Bearer <token>
 9. Remove product (As ROLE_ADMIN)
 
 10. All APIs address through Gatway Service (http://localhost:9090) as well. 
+
+
+
+NOTE: Unit tests are not working (requierd to work/fix).
+
+
 
 
 
